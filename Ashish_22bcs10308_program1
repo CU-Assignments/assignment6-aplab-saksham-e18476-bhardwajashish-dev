@@ -1,0 +1,47 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+// Definition for a binary tree node.
+struct TreeNode {
+    int val;
+    TreeNode* left;
+    TreeNode* right;
+    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+};
+
+TreeNode* sortedArrayToBSTHelper(vector<int>& nums, int start, int end) {
+    if (start > end) return nullptr;
+
+    int mid = start + (end - start) / 2; // Middle element as root
+    TreeNode* root = new TreeNode(nums[mid]);
+
+    root->left = sortedArrayToBSTHelper(nums, start, mid - 1);  // Left subtree
+    root->right = sortedArrayToBSTHelper(nums, mid + 1, end);    // Right subtree
+
+    return root;
+}
+
+TreeNode* sortedArrayToBST(vector<int>& nums) {
+    return sortedArrayToBSTHelper(nums, 0, nums.size() - 1);
+}
+
+// Utility function for inorder traversal (to verify tree)
+void inorderTraversal(TreeNode* root) {
+    if (!root) return;
+    inorderTraversal(root->left);
+    cout << root->val << " ";
+    inorderTraversal(root->right);
+}
+
+int main() {
+    vector<int> nums = {-10, -3, 0, 5, 9};
+    TreeNode* root = sortedArrayToBST(nums);
+
+    cout << "Inorder Traversal of BST: ";
+    inorderTraversal(root); // Expected: -10 -3 0 5 9
+    cout << endl;
+
+    return 0;
+}
